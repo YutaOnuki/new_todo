@@ -26,6 +26,12 @@
             Sample Task
         </label>
       </div>
+      <div class="panel-block">
+        <div class="field">
+          <input class="is-checkradio" id="exampleCheckbox" type="checkbox" name="exampleCheckbox">
+          <label for="exampleCheckbox">Check me</label>
+        </div>
+      </div>
     </div>
 
     <!-- 完了タスク表示ボタン -->
