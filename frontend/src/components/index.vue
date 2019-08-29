@@ -20,17 +20,11 @@
       <p class="panel-heading is-info">
         Your Tasks
       </p>
-      <div class="panel-block">
-        <label class="checkbox">
-          <input type="checkbox">
-            Sample Task
+      <div v-for="task in tasks" v-if="!task.is_done" v-bind:id="'row_task_' + task.id" class="panel-block">
+        <label class="checkbox" v-bind:for="'task_' + task.id">
+          <input type="checkbox" v-bind:id="'task_' + task.id">
+            {{ task.name }}
         </label>
-      </div>
-      <div class="panel-block">
-        <div class="field">
-          <input class="is-checkradio" id="exampleCheckbox" type="checkbox" name="exampleCheckbox">
-          <label for="exampleCheckbox">Check me</label>
-        </div>
       </div>
     </div>
 
@@ -43,24 +37,59 @@
 
     <!-- 完了タスク一覧 -->
     <div class="panel">
-      <label class="panel-block">
-        <span class="icon has-text-success">
+      <label v-for="task in tasks" v-if="task.is_done" v-bind:id="'row_task_' + task.id" class="panel-block">
+        <span v-bind:id="'task_' + task.id" class="icon has-text-success">
           <i class="far fa-check-circle"></i>
         </span>
-        <p>
-          Sample Finished Task
+        <p v-bind:for="'task_' + task.id" class="line-through">
+          {{ task.name }}
         </p>
       </label>
     </div>
   </div>
 </template>
 
-<style>
+<script>
+import axios from 'axios';
+
+export default {
+  data: function() {
+    return {
+      tasks: [],
+      newTask: '',
+    }
+  },
+  mounted: function() {
+    this.fetchTasks();
+  },
+  methods: {
+    fetchTasks: function() {
+      axios.get('api/tasks').then((response) => {
+        for(var i = 0; i < response.data.tasks.length; i++) {
+          this.tasks.push(response.data.tasks[i]);
+        }
+      }, (error) => {
+        console.log(error);
+      });
+    }
+  }
+}
+</script>
+
+<style scoped>
+  [v-cloak] {
+    display: none;
+  }
+  .display_none {
+    display: none;
+  }
+  .line-through {
+    text-decoration: line-through;
+  }
   .panel-heading {
     background-color: hsl(204, 86%, 53%);
     color: hsl(0, 0%, 100%);
   }
-
   .finished-button {
     margin-bottom: 30px;
   }
