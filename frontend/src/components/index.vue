@@ -4,13 +4,13 @@
     <div class="columns">
       <div class="column is-10">
         <div class="control has-icons-left">
-          <input class="input is-rounded is-info" type="text" placeholder="Add your plans!!">
+          <input v-model="newTask" class="input is-rounded is-info" type="text" placeholder="Add your plans!!">
           <span class="icon is-right">
             <i class="fas fa-pencil-alt"></i>
           </span>
         </div>
       </div>
-      <div class="column is-2">
+      <div v-on:click="createTask" class="column is-2">
         <a class="button is-rounded is-info">Add Task!</a>
       </div>
     </div>
@@ -23,14 +23,8 @@
       <div class="panel-block">
         <label class="checkbox">
           <input type="checkbox">
-            Sample Task
+            task
         </label>
-      </div>
-      <div class="panel-block">
-        <div class="field">
-          <input class="is-checkradio" id="exampleCheckbox" type="checkbox" name="exampleCheckbox">
-          <label for="exampleCheckbox">Check me</label>
-        </div>
       </div>
     </div>
 
@@ -54,6 +48,36 @@
     </div>
   </div>
 </template>
+
+<script>
+import axios from 'axios'
+
+axios.defaults.headers.common = {
+  'X-Requested-With': 'XMLHttpRequest',
+  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+}
+
+export default {
+  data: function () {
+    return {
+      tasks: [],
+      newTask: ''
+    }
+  },
+  methods: {
+    createTask: function () {
+      if (!this.newTask) return
+
+      axios.post('/api/tasks', { task: { name: this.newTask } }).then((response) => {
+        this.tasks.unshift(response.data.task)
+        this.newTask = ''
+      }, (error) => {
+        console.log(error)
+      })
+    }
+  }
+}
+</script>
 
 <style>
   .panel-heading {
