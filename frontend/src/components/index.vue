@@ -20,10 +20,10 @@
       <p class="panel-heading is-info">
         Your Tasks
       </p>
-      <div class="panel-block">
+      <div v-for="task in checkIncompletedTasks" :key="task.id" class="panel-block">
         <label class="checkbox">
           <input type="checkbox">
-            task
+            {{ task.name }}
         </label>
       </div>
     </div>
@@ -62,6 +62,13 @@ export default {
     return {
       tasks: [],
       newTask: ''
+    }
+  },
+  computed: {
+    checkIncompletedTasks: function () {
+      return this.tasks.filter(function (task) {
+        return !task.is_done
+      })
     }
   },
   methods: {
