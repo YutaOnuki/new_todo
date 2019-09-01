@@ -30,19 +30,19 @@
 
     <!-- 完了タスク表示ボタン -->
     <div>
-      <button class="button is-info is-fullwidth is-focused is-rounded finished-button">
+      <button v-on:click="displayCompleteTasks" class="button is-info is-fullwidth is-focused is-rounded finished-button">
         Show Finished Tasks
       </button>
     </div>
 
     <!-- 完了タスク一覧 -->
-    <div class="panel">
-      <label class="panel-block">
+    <div id="finishedTasks" class="panel display-none">
+      <label v-for="task in CompleteTasks" :key="task.id" class="panel-block">
         <span class="icon has-text-success">
           <i class="far fa-check-circle"></i>
         </span>
-        <p>
-          Sample Finished Task
+        <p class="line-through">
+          {{ task.name }}
         </p>
       </label>
     </div>
@@ -69,6 +69,11 @@ export default {
       return this.tasks.filter(function (task) {
         return !task.is_done
       })
+    },
+    CompleteTasks: function () {
+      return this.tasks.filter(function (task) {
+        return task.is_done
+      })
     }
   },
   methods: {
@@ -81,12 +86,32 @@ export default {
       }, (error) => {
         console.log(error)
       })
+    },
+    displayCompleteTasks: function () {
+      var doneTasks = this.tasks.filter(function (task) {
+        return task.is_done
+      })
+      if (doneTasks.length > 0) {
+        document.querySelector('#finishedTasks').style.display = 'block'
+      }
     }
   }
 }
 </script>
 
 <style>
+   [v-cloak] {
+    display: none;
+  }
+
+  .display-none {
+    display: none;
+  }
+
+  .line-through {
+    text-decoration: line-through;
+  }
+
   .panel-heading {
     background-color: hsl(204, 86%, 53%);
     color: hsl(0, 0%, 100%);
