@@ -20,9 +20,9 @@
       <p class="panel-heading is-info">
         Your Tasks
       </p>
-      <div v-for="task in checkIncompletedTasks" :key="task.id" class="panel-block">
+      <div id="'task_' + task.id" v-for="task in checkIncompletedTasks" :key="task.id" class="panel-block">
         <label class="checkbox">
-          <input type="checkbox">
+          <input v-on:click="doneTask(task.id)" type="checkbox">
             {{ task.name }}
         </label>
       </div>
@@ -64,6 +64,14 @@ export default {
       newTask: ''
     }
   },
+  mounted () {
+    const self = this
+    axios.get('/api/tasks').then(function (response) {
+      response.data.task.forEach(function (task) {
+        self.tasks.push(task)
+      })
+    })
+  },
   computed: {
     checkIncompletedTasks: function () {
       return this.tasks.filter(function (task) {
@@ -83,6 +91,16 @@ export default {
       axios.post('/api/tasks', { task: { name: this.newTask } }).then((response) => {
         this.tasks.unshift(response.data.task)
         this.newTask = ''
+      }, (error) => {
+        console.log(error)
+      })
+    },
+    doneTask: function (taskId) {
+      axios.put('/api/tasks/' + taskId, { task: { is_done: 1 } }).then((response) => {
+        var index = this.tasks.findIndex(function (element) {
+          return element.id === taskId
+        })
+        this.$set(this.tasks[index], 'is_done', true)
       }, (error) => {
         console.log(error)
       })
