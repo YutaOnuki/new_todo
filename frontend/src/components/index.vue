@@ -28,10 +28,15 @@
       </div>
     </div>
 
-    <!-- 完了タスク表示ボタン -->
-    <div>
+    <!-- 完了タスク表示・非表示ボタン -->
+    <div id="displayButton">
       <button v-on:click="displayCompleteTasks" class="button is-info is-fullwidth is-focused is-rounded finished-button">
         Show Finished Tasks
+      </button>
+    </div>
+    <div id="hideButton" class="display-none">
+      <button v-on:click="hideFinishedTasks" class="button is-info is-fullwidth is-focused is-rounded finished-button display-none">
+        Hide Finished Tasks
       </button>
     </div>
 
@@ -110,8 +115,15 @@ export default {
         return task.is_done
       })
       if (doneTasks.length > 0) {
+        document.querySelector('#displayButton').style.display = 'none'
+        document.querySelector('#hideButton').style.display = 'block'
         document.querySelector('#finishedTasks').style.display = 'block'
       }
+    },
+    hideFinishedTasks: function () {
+      document.querySelector('#hideButton').style.display = 'none'
+      document.querySelector('#finishedTasks').style.display = 'none'
+      document.querySelector('#displayButton').style.display = 'block'
     }
   }
 }
