@@ -31,4 +31,7 @@ export default {
   margin-bottom: 30px;
 }
 
+li {
+  list-style: none;
+}
 </style>
