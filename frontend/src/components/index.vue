@@ -150,8 +150,4 @@ export default {
   .finished-button {
     margin-bottom: 30px;
   }
-
-  .v-move {
-    transition: transform 1s;
-  }
 </style>
