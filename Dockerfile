@@ -25,3 +25,6 @@ COPY frontend/package.json frontend/.
 COPY frontend/package-lock.json frontend/.
 
 RUN cd frontend && npm install
+
+# heroku デプロイ用
+COPY . .
